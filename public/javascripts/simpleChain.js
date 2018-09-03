@@ -49,6 +49,9 @@ class Blockchain {
 /*
 * Add block to the database
 * */
+    addblock_util(content){
+        return this.addBlock(new Block(content))
+    }
     addBlock(newBlock) {
         // Block height
         this.getBlockHeight().then(height => {
@@ -62,7 +65,9 @@ class Blockchain {
 
                     newBlock.previousBlockHash = Block.hash;
                     this.addDataToLevelDB(newBlock);
+                    return true;
                 }).catch(error => {
+                    return(error)
                     console.log("Error in getBlock at addBlock with newBlock.height " + newBlock.height + error);
                 })
 
@@ -73,6 +78,7 @@ class Blockchain {
                 this.addDataToLevelDB(newBlock);
             }
         }).catch(error => {
+            return(error);
             console.log("Error in AddBlock" + error);
         })
     }
@@ -354,4 +360,7 @@ class Blockchain {
 // }, 400);
 
 
-module.exports = new Blockchain();
+module.exports ={
+    blockchain:new Blockchain(),
+    block: new Block()
+}
